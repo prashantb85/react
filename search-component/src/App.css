@@ -1,0 +1,21 @@
+.component
+{
+  text-align: left;
+  margin: 300px;
+  width: 300px;
+}
+
+.intellisense
+{
+  border: 1px solid black;
+}
+.intellisenseItems
+{
+  cursor:pointer;
+  text-align: start;
+  margin: 2px 0 0 0 ;
+}
+
+input{
+  width: 77%;
+}
