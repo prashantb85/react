@@ -20,16 +20,26 @@
 
 import {  createContext, useContext, useState,useEffect } from 'react';
 import './App.css';
+import axios from 'axios';
 
 const TxtSearchContext  = createContext();
 
 const dataList  = 
   [{id:"1",name:"abc"},{id:"2",name:"def"},{id:"3",name:"ghi"}];
 
-  
+ 
+ 
 
+  
 function App() {
 
+  const[dataFromServer,setDataFromServer] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:3000/dataSource.json").then((data) => {
+      console.log(data.data.information);
+      setDataFromServer(data?.data);
+    });
+  }, []);
 
   const[showIntellisense,setShowIntellisense] = useState(false);
   const[txtSearchValue,setTxtSearchValue] = useState('');
@@ -52,7 +62,7 @@ function App() {
           <button id="btnSearch" onClick={Search} key="keyBtnSearch">Search</button>
           
           {
-          showIntellisense && txtSearchValue.length!==0 ? <TxtSearchContext.Provider value={txtSearchValue}>
+          showIntellisense && txtSearchValue.length!==0 ? <TxtSearchContext.Provider value={ {value1:[txtSearchValue,setTxtSearchValue],value2:[dataFromServer,setDataFromServer]}}>
                                 <Intellisense change={setTxtSearchValue} intellisense={setShowIntellisense} /> 
                               </TxtSearchContext.Provider> 
                             : null}
@@ -63,13 +73,22 @@ function App() {
 
 const Intellisense=(props)=>{
 
-  const txtSearchSelectedValue  = useContext(TxtSearchContext);
-  
+ 
+ // const txtSearchSelectedValue  = useContext(TxtSearchContext);
+  const {value1,value2} = useContext(TxtSearchContext);
+
+  const [txtSearchSelectedValue,setTxtSearchSelectedValue]=value1;
+  const[dataFromServer,setDataFromServer]=value2;
+
+  console.log("txtSearchSelectedValue: "+txtSearchSelectedValue);
+  console.log("dataFromServer: "+dataFromServer.information);
+
+
   const dataColumn  = "name";
 
-  const filteredNames = dataList.filter(
+  const filteredNames = dataFromServer.information.filter(
     (item) =>{
-      return item.name.toLowerCase().startsWith(txtSearchSelectedValue)
+      return item.data.toLowerCase().startsWith(txtSearchSelectedValue)
     }
   )
   return(
@@ -78,8 +97,8 @@ const Intellisense=(props)=>{
                 filteredNames.map( (item)=> 
                   {
                     return <div key={item.id} 
-                    onClick={()=>{props.change(item.name);props.intellisense(false);} } 
-                    className="intellisenseItems">{item.name} 
+                    onClick={()=>{props.change(item.data);props.intellisense(false);} } 
+                    className="intellisenseItems">{item.data} 
                     </div>;
                   })        
               }
