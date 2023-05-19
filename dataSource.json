@@ -1,0 +1,17 @@
+{
+  "name": "Create React App Sample",
+  "information": [
+    {
+      "id": "1",
+      "data": "Pune"
+    },
+    {
+      "id": "2",
+      "data": "Bengaluru"
+    },
+    {
+      "id": "3",
+      "data": "Hyderabad"
+    }
+  ]
+}
