@@ -35,7 +35,7 @@ function App() {
 
   const[dataFromServer,setDataFromServer] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3000/dataSource.json").then((data) => {
+    axios.get("https://prashantb85.github.io/react/dataSource.json").then((data) => {
       console.log(data.data.information);
       setDataFromServer(data?.data);
     });
